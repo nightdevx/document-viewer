@@ -59,7 +59,8 @@ function render(): void {
   tabsEl.replaceChildren(...tm.tabs.map(tabElement))
   const active = tm.active
   $('empty').hidden = tm.tabs.length > 0
-  $('tools').setAttribute('aria-disabled', String(!active || active.failed))
+  const inert = !active || active.failed || pickViewer(active.file.ext) === 'unsupported'
+  $('tools').setAttribute('aria-disabled', String(inert))
   $('tools').toggleAttribute('data-empty', !active)
   document.title = active ? `${active.file.name} · Document Viewer` : 'Document Viewer'
   renderZoom()
