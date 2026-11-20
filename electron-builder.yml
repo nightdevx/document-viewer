@@ -12,8 +12,9 @@ files:
   - '!test-files/*'
   - '!.impeccable/*'
   - '!.playwright-mcp/*'
+  - '!{docs,design,.github}/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,PLAN.md,PRODUCT.md}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,README.tr.md,PLAN.md,PRODUCT.md,DESIGN.md,LICENSE}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
@@ -25,7 +26,7 @@ nsis:
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: DocumentViewer-Setup-${version}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
 # Registers the app under "Open with" for these types; Windows lets only the user pick the default.

@@ -1,7 +1,7 @@
 {
   "name": "document-viewer",
   "version": "1.0.0",
-  "description": "Document viewer for PDF, Office, Markdown and text files",
+  "description": "A document viewer for Windows: PDF, Word, Excel, PowerPoint, Markdown and code in one tabbed window",
   "main": "./out/main/index.js",
   "author": "nightdijital <iletisim@nightdijital.com>",
   "homepage": "https://nightdijital.com",
@@ -50,5 +50,13 @@
     "vitest": "^5.1.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nightdevx/document-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nightdevx/document-viewer/issues"
+  },
+  "license": "MIT"
 }
