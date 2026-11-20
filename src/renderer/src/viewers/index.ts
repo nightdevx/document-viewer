@@ -13,11 +13,11 @@ export async function createViewer(file: OpenedFile): Promise<Viewer> {
       return (await import('./sheet/grid')).createSheetViewer()
     case 'docx':
       return (await import('./docx')).createDocxViewer()
+    case 'pptx':
+      return (await import('./pptx')).createPptxViewer()
     case 'markdown':
       return (await import('./markdown')).createMarkdownViewer()
     case 'unsupported':
       return createUnsupportedViewer('Bu format desteklenmiyor. Word için .docx, PowerPoint için .pptx kullan.')
-    default:
-      return createUnsupportedViewer('Bu dosya türü için görüntüleyici henüz hazır değil.')
   }
 }

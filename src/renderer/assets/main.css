@@ -99,7 +99,8 @@ button {
   color: inherit;
 }
 
-svg {
+/* UI icons only; documents bring their own SVG (charts, shapes). */
+:where(.strip, .empty, .message-screen, .notice, .tab) svg {
   width: 16px;
   height: 16px;
   flex: none;
@@ -639,6 +640,105 @@ kbd {
   margin-bottom: 16px;
   box-shadow: var(--shadow);
   color: #000;
+}
+
+/* PowerPoint: thumbnail strip on the left, slides on the table */
+.pptx-view {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 196px 1fr;
+}
+
+.pptx-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 12px;
+  overflow-y: auto;
+  border-right: 1px solid var(--table-line);
+}
+
+.thumb {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  gap: 6px;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--table-ink-muted);
+  font-size: 12px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.thumb:hover {
+  background: color-mix(in oklch, var(--table-ink) 6%, transparent);
+}
+
+.thumb[aria-current='true'] {
+  color: var(--table-ink);
+  font-weight: 600;
+}
+
+.thumb[aria-current='true'] .thumb-frame {
+  outline: 2px solid var(--pencil);
+  outline-offset: 1px;
+}
+
+.thumb-frame {
+  position: relative;
+  width: 144px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 2px oklch(0.2 0.01 255 / 0.25);
+  pointer-events: none;
+}
+
+.thumb-frame > * {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  margin: 0 !important;
+  transform: scale(0.15);
+  transform-origin: 0 0;
+}
+
+.pptx-stage {
+  overflow: auto;
+  outline: none;
+}
+
+.pptx-deck {
+  padding: 24px 24px 48px;
+}
+
+.pptx-deck .pptx-preview-wrapper {
+  background: transparent !important;
+}
+
+.pptx-deck .pptx-preview-slide-wrapper {
+  margin: 0 auto 20px !important;
+  box-shadow: var(--shadow);
+}
+
+.chart-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #b8b8b8;
+  color: #6b6b6b;
+  font: 14px var(--font);
+  background: repeating-linear-gradient(135deg, transparent 0 10px, rgb(0 0 0 / 0.025) 10px 20px);
+}
+
+.print-slides .pptx-preview-slide-wrapper {
+  margin: 0 !important;
+  break-after: page;
 }
 
 /* spreadsheet: the sheet stays white like paper in both themes */
