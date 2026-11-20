@@ -3,6 +3,7 @@ import 'github-markdown-css/github-markdown.css'
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
 import { printNode } from '../shell/print'
+import { emitStatus } from '../shell/status'
 import { highlight } from './highlight'
 import { loadLocalImages } from './images'
 import { decodeText } from './text-decode'
@@ -35,6 +36,8 @@ export function createMarkdownViewer(): Viewer {
       blobs = await loadLocalImages(body, file.path)
       host.replaceChildren(doc)
       search = createDomSearch(doc)
+      const words = (body.textContent ?? '').split(/\s+/).filter(Boolean).length
+      emitStatus(host, { position: `${words.toLocaleString('tr-TR')} kelime`, info: 'Markdown' })
     },
     setZoom(z) {
       doc.style.zoom = String(z)

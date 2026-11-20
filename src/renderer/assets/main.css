@@ -316,8 +316,8 @@ button {
 .ruler-ticks {
   position: absolute;
   inset: 0;
-  --cm: 37.795px;
-  --minor: 3.78px;
+  --cm: 38px;
+  --minor: 19px;
   background:
     linear-gradient(to right, var(--rail-ink) 1px, transparent 1px) 0 0 / var(--cm) 9px repeat-x,
     linear-gradient(to right, var(--rail-ink-muted) 1px, transparent 1px) 0 0 / var(--minor) 4px repeat-x;
@@ -597,6 +597,10 @@ kbd {
 
 .pdf-container .pdfViewer {
   padding: 24px 0 48px;
+}
+
+.pdf-container .pdfViewer .page:first-child {
+  margin-top: 24px !important;
 }
 
 .pdf-container .pdfViewer .page {

@@ -103,10 +103,11 @@ function tabElement(tab: Tab): HTMLElement {
 function renderZoom(): void {
   const z = tm.active?.zoom ?? 1
   $('zoom-value').textContent = `%${Math.round(z * 100)}`
-  const cm = (96 / 2.54) * z
+  // Whole-pixel spacing keeps 1px ticks crisp and even; rounding costs well under 1% of a centimetre.
+  const cm = Math.round((96 / 2.54) * z)
   const ticks = $('ruler-ticks')
   ticks.style.setProperty('--cm', `${cm}px`)
-  ticks.style.setProperty('--minor', `${cm / 10 >= 4 ? cm / 10 : cm / 2}px`)
+  ticks.style.setProperty('--minor', cm >= 16 ? `${Math.round(cm / 2)}px` : '0px')
 }
 
 function renderStatus(): void {
