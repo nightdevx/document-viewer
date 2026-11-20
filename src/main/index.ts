@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, Menu, shell } from 'electron'
 import { statSync } from 'fs'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -59,6 +59,8 @@ function createWindow(): BrowserWindow {
 }
 
 function start(): void {
+  // No app menu: its default zoom/reload accelerators would act on the whole window.
+  Menu.setApplicationMenu(null)
   electronApp.setAppUserModelId('com.nightdijital.documentviewer')
   app.on('browser-window-created', (_, window) => optimizer.watchWindowShortcuts(window))
 

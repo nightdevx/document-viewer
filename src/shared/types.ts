@@ -27,6 +27,8 @@ export interface Api {
   openExternal(url: string): void
   print(): Promise<void>
   openDefaultAppsSettings(): void
+  /** Real disk path of a dropped File (Electron removed File.path). */
+  pathForFile(file: File): string
 }
 
 export const LARGE_FILE_BYTES = 200 * 1024 * 1024

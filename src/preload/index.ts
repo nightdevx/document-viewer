@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, webUtils } from 'electron'
 import type { Api, OpenedFile } from '../shared/types'
 
 type ReadReply = { ok: true; file: OpenedFile } | { ok: false; code: string; size?: number }
@@ -16,7 +16,8 @@ const api: Api = {
   },
   openExternal: (url) => ipcRenderer.send('open-external', url),
   print: () => ipcRenderer.invoke('print'),
-  openDefaultAppsSettings: () => ipcRenderer.send('open-default-apps')
+  openDefaultAppsSettings: () => ipcRenderer.send('open-default-apps'),
+  pathForFile: (file) => webUtils.getPathForFile(file)
 }
 
 contextBridge.exposeInMainWorld('api', api)

@@ -10,7 +10,62 @@
     <link href="./assets/main.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-    <div id="app"></div>
+    <header class="strip">
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Açık belgeler"></nav>
+      <button class="icon-btn open-btn" id="open" type="button" title="Aç (Ctrl+O)" aria-label="Belge aç"></button>
+      <div class="tools" id="tools">
+        <div class="search" role="search">
+          <span class="search-icon" id="search-icon"></span>
+          <input id="search" type="search" placeholder="Belgede ara" aria-label="Belgede ara" autocomplete="off" spellcheck="false" />
+          <output id="search-count" class="search-count" aria-live="polite"></output>
+          <button class="icon-btn small" id="search-prev" type="button" title="Önceki (Shift+Enter)" aria-label="Önceki eşleşme"></button>
+          <button class="icon-btn small" id="search-next" type="button" title="Sonraki (Enter)" aria-label="Sonraki eşleşme"></button>
+        </div>
+        <div class="zoom" aria-label="Yakınlaştırma">
+          <button class="icon-btn" id="zoom-out" type="button" title="Uzaklaştır (Ctrl+-)" aria-label="Uzaklaştır"></button>
+          <button class="ruler" id="ruler" type="button" title="Gerçek boyut (Ctrl+0)" aria-label="Gerçek boyuta dön">
+            <span class="ruler-ticks" id="ruler-ticks"></span>
+            <span class="ruler-value" id="zoom-value">%100</span>
+          </button>
+          <button class="icon-btn" id="zoom-in" type="button" title="Yakınlaştır (Ctrl++)" aria-label="Yakınlaştır"></button>
+        </div>
+        <button class="icon-btn" id="print" type="button" title="Yazdır (Ctrl+P)" aria-label="Yazdır"></button>
+      </div>
+    </header>
+
+    <main class="table" id="content">
+      <div class="notice" id="notice" hidden>
+        <span id="notice-text"></span>
+        <button class="icon-btn small" id="notice-close" type="button" aria-label="Kapat"></button>
+      </div>
+      <section class="empty" id="empty">
+        <div class="sheet-outline" id="drop-sheet">
+          <span class="empty-icon" id="empty-icon"></span>
+          <button class="primary-btn" id="empty-open" type="button">Belge aç</button>
+          <p>ya da dosyayı buraya sürükle</p>
+          <p class="hint"><kbd>Ctrl</kbd> + <kbd>O</kbd></p>
+        </div>
+        <button class="link-btn" id="default-apps" type="button">Varsayılan uygulama olarak ayarla</button>
+      </section>
+    </main>
+
+    <footer class="status" id="status">
+      <span id="status-position"></span>
+      <span id="status-info"></span>
+    </footer>
+
+    <dialog class="dialog" id="large-dialog">
+      <form method="dialog">
+        <h2 id="large-title"></h2>
+        <p>Büyük dosyaların açılması uzun sürebilir.</p>
+        <div class="dialog-actions">
+          <button class="secondary-btn" value="cancel" type="submit">Vazgeç</button>
+          <button class="primary-btn" value="open" type="submit">Yine de aç</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="print-root"></div>
     <script type="module" src="./src/renderer.ts"></script>
   </body>
 </html>

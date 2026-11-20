@@ -63,6 +63,27 @@ describe('TabManager', () => {
     expect(viewers).toHaveLength(1)
   })
 
+  it('a viewer that fails to mount shows an error screen and other tabs keep working', async () => {
+    const content = document.createElement('div')
+    let n = 0
+    const tm = new TabManager({
+      content,
+      createViewer: () => {
+        const v = fakeViewer()
+        if (n++ === 0) v.mount = async () => Promise.reject(new Error('Dosya bozuk ya da uzantısı yanlış.'))
+        return v
+      },
+      onChange: () => {}
+    })
+    const bad = await tm.open(file('C:\\bozuk.docx'))
+    expect(bad.failed).toBe(true)
+    expect(bad.host.querySelector('.error-screen')?.textContent).toContain('Dosya bozuk ya da uzantısı yanlış.')
+    expect(bad.host.querySelector('.error-screen')?.textContent).toContain('bozuk.docx')
+    const good = await tm.open(file('C:\\iyi.txt'))
+    expect(good.failed).toBe(false)
+    expect(tm.tabs).toHaveLength(2)
+  })
+
   it('close disposes the viewer once and removes its host', async () => {
     const { tm, content, viewers } = setup()
     const a = await tm.open(file('C:\\a.txt'))

@@ -1,12 +1,23 @@
 import type { OpenedFile, Viewer } from '../../../shared/types'
+import { errorScreen } from './screens'
 
-export type Tab = { id: number; file: OpenedFile; viewer: Viewer; host: HTMLElement }
+export type Tab = { id: number; file: OpenedFile; viewer: Viewer; host: HTMLElement; zoom: number; failed: boolean }
 
 type Options = {
   content: HTMLElement
   /** May be async so heavy viewers load on demand. */
   createViewer: (file: OpenedFile) => Viewer | Promise<Viewer>
   onChange: () => void
+}
+
+/** Stands in until the real viewer loads, and stays when loading it fails. */
+const inertViewer: Viewer = {
+  mount: async () => {},
+  setZoom: () => {},
+  search: () => ({ index: 0, total: 0 }),
+  clearSearch: () => {},
+  print: async () => {},
+  dispose: () => {}
 }
 
 export const normalizePath = (p: string): string => p.replace(/\//g, '\\').toLowerCase()
@@ -40,10 +51,17 @@ export class TabManager {
     const host = document.createElement('div')
     host.className = 'tab-host'
     this.opts.content.append(host)
-    const tab: Tab = { id: this.nextId++, file, viewer: await this.opts.createViewer(file), host }
+    const tab: Tab = { id: this.nextId++, file, viewer: inertViewer, host, zoom: 1, failed: false }
     this.tabs.push(tab)
     this.activate(tab.id)
-    await tab.viewer.mount(host, file)
+    try {
+      tab.viewer = await this.opts.createViewer(file)
+      await tab.viewer.mount(host, file)
+    } catch (e) {
+      tab.failed = true
+      host.replaceChildren(errorScreen(file.name, e instanceof Error ? e.message : String(e)))
+      this.opts.onChange()
+    }
     return tab
   }
 
