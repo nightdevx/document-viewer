@@ -628,6 +628,19 @@ kbd {
   break-after: page;
 }
 
+/* Word: pages lie on the table, white in both themes */
+.docx-doc .docx-wrapper {
+  padding: 24px 0 48px;
+  background: transparent;
+  align-items: center;
+}
+
+.docx-doc .docx-wrapper > section.docx {
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  color: #000;
+}
+
 /* spreadsheet: the sheet stays white like paper in both themes */
 .loading {
   display: grid;
