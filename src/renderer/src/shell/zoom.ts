@@ -7,3 +7,23 @@ export function nextZoom(current: number, dir: 1 | -1): number {
   const found = dir === 1 ? LEVELS.find((l) => l > current + 1e-6) : [...LEVELS].reverse().find((l) => l < current - 1e-6)
   return found ?? (dir === 1 ? 5 : 0.25)
 }
+
+export type ZoomAnchor = { x: number; y: number }
+
+/** New scroll offset that keeps the content under `offset` (px from the scroller's edge) in place. */
+export const anchoredScroll = (scroll: number, offset: number, oldZ: number, newZ: number): number =>
+  Math.max(0, ((scroll + offset) * newZ) / oldZ - offset)
+
+/**
+ * Zooms a scroller's CSS-zoomed content around `anchor` (client coordinates; the scroller's centre
+ * when missing) so the spot under the cursor stays under the cursor.
+ */
+export function zoomAround(scroller: HTMLElement, content: HTMLElement, oldZ: number, newZ: number, anchor?: ZoomAnchor): void {
+  const r = scroller.getBoundingClientRect()
+  const ox = (anchor?.x ?? r.left + r.width / 2) - r.left
+  const oy = (anchor?.y ?? r.top + r.height / 2) - r.top
+  const left = anchoredScroll(scroller.scrollLeft, ox, oldZ, newZ)
+  const top = anchoredScroll(scroller.scrollTop, oy, oldZ, newZ)
+  content.style.zoom = String(newZ)
+  scroller.scrollTo(left, top)
+}

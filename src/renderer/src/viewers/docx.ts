@@ -2,6 +2,7 @@ import { renderAsync } from 'docx-preview'
 import JSZip from 'jszip'
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
+import { zoomAround } from '../shell/zoom'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { contextualSpacingCss } from './docx-fixes'
@@ -25,6 +26,7 @@ export function createDocxViewer(): Viewer {
   let host: HTMLElement
   let doc: HTMLElement
   let search: DomSearch
+  let zoom = 1
   let observer: IntersectionObserver | null = null
 
   return {
@@ -83,8 +85,9 @@ export function createDocxViewer(): Viewer {
       pages.forEach((p) => observer!.observe(p))
       report(0)
     },
-    setZoom(z) {
-      doc.style.zoom = String(z)
+    setZoom(z, anchor) {
+      zoomAround(doc.parentElement!, doc, zoom, z, anchor)
+      zoom = z
     },
     search: (q, dir) => search.search(q, dir),
     clearSearch: () => search?.clear(),

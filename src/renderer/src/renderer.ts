@@ -133,11 +133,11 @@ function closeTab(id: number): void {
   tm.close(id)
 }
 
-function setZoom(z: number): void {
+function setZoom(z: number, anchor?: { x: number; y: number }): void {
   const tab = tm.active
   if (!tab || tab.failed) return
   tab.zoom = clampZoom(z)
-  tab.viewer.setZoom(tab.zoom)
+  tab.viewer.setZoom(tab.zoom, anchor)
   renderZoom()
 }
 
@@ -280,7 +280,7 @@ content.addEventListener(
   (e) => {
     if (!e.ctrlKey) return
     e.preventDefault()
-    setZoom(nextZoom(tm.active?.zoom ?? 1, e.deltaY < 0 ? 1 : -1))
+    setZoom(nextZoom(tm.active?.zoom ?? 1, e.deltaY < 0 ? 1 : -1), { x: e.clientX, y: e.clientY })
   },
   { passive: false }
 )

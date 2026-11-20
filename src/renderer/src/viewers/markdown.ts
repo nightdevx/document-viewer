@@ -2,6 +2,7 @@ import MarkdownIt from 'markdown-it'
 import 'github-markdown-css/github-markdown.css'
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
+import { zoomAround } from '../shell/zoom'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { highlight } from './highlight'
@@ -14,6 +15,7 @@ const md = new MarkdownIt({ html: false, linkify: true })
 export function createMarkdownViewer(): Viewer {
   let doc: HTMLElement
   let search: DomSearch
+  let zoom = 1
   let blobs: string[] = []
 
   return {
@@ -39,8 +41,9 @@ export function createMarkdownViewer(): Viewer {
       const words = (body.textContent ?? '').split(/\s+/).filter(Boolean).length
       emitStatus(host, { position: `${words.toLocaleString('tr-TR')} kelime`, info: 'Markdown' })
     },
-    setZoom(z) {
-      doc.style.zoom = String(z)
+    setZoom(z, anchor) {
+      zoomAround(doc.parentElement!, doc, zoom, z, anchor)
+      zoom = z
     },
     search: (q, dir) => search.search(q, dir),
     clearSearch: () => search?.clear(),

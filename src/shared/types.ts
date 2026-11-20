@@ -10,8 +10,11 @@ export type ViewerKind = 'pdf' | 'docx' | 'sheet' | 'pptx' | 'markdown' | 'code'
 export interface Viewer {
   /** Throwing here makes the shell show an error screen for this tab. */
   mount(host: HTMLElement, file: OpenedFile): Promise<void>
-  /** 1 = 100%, clamped by the shell to 0.25..5 */
-  setZoom(scale: number): void
+  /**
+   * 1 = 100%, clamped by the shell to 0.25..5. `anchor` (client coordinates) is the point that must
+   * stay put: the cursor for Ctrl+wheel, the viewport centre otherwise.
+   */
+  setZoom(scale: number, anchor?: { x: number; y: number }): void
   /**
    * Calling again with the same query moves to the next (1) or previous (-1) match.
    * Viewers whose count grows later (PDF) dispatch 'viewer-search' on their host with the new SearchResult.

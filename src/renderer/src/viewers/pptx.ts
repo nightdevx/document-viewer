@@ -2,6 +2,7 @@ import JSZip from 'jszip'
 import { init } from 'pptx-preview'
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
+import { zoomAround } from '../shell/zoom'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { assertOfficeZip } from './docx'
@@ -21,6 +22,7 @@ export function createPptxViewer(): Viewer {
   let observer: IntersectionObserver | null = null
   let previewer: ReturnType<typeof init> | null = null
   let current = 0
+  let zoom = 1
   let sizeInfo = ''
 
   function status(i: number): void {
@@ -102,8 +104,9 @@ export function createPptxViewer(): Viewer {
       search = createDomSearch(deck)
       status(0)
     },
-    setZoom(z) {
-      deck.style.zoom = String(z)
+    setZoom(z, anchor) {
+      zoomAround(stage, deck, zoom, z, anchor)
+      zoom = z
     },
     search: (q, dir) => search.search(q, dir),
     clearSearch: () => search?.clear(),

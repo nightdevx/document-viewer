@@ -1,5 +1,6 @@
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
+import { zoomAround } from '../shell/zoom'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { highlight, languageFor } from './highlight'
@@ -11,6 +12,7 @@ const PLAIN_ABOVE = 1024 * 1024
 export function createCodeViewer(): Viewer {
   let doc: HTMLElement
   let search: DomSearch
+  let zoom = 1
 
   return {
     async mount(host, file) {
@@ -36,8 +38,9 @@ export function createCodeViewer(): Viewer {
         info: lang === 'text' ? 'Düz metin' : lang
       })
     },
-    setZoom(z) {
-      doc.style.zoom = String(z)
+    setZoom(z, anchor) {
+      zoomAround(doc.parentElement!, doc, zoom, z, anchor)
+      zoom = z
     },
     search: (q, dir) => search.search(q, dir),
     clearSearch: () => search?.clear(),

@@ -114,9 +114,11 @@ export function createPdfViewer(): Viewer {
         host.dispatchEvent(new CustomEvent('viewer-search', { bubbles: true, detail: counts(e.matchesCount) }))
       )
     },
-    setZoom(z) {
-      viewer.currentScale = z
-      showTopMargin()
+    setZoom(z, anchor) {
+      // updateScale keeps the point under `origin` in place; plain currentScale jumps to the page top.
+      const r = container.getBoundingClientRect()
+      const origin = [anchor?.x ?? r.left + r.width / 2, anchor?.y ?? r.top + r.height / 2]
+      viewer.updateScale({ scaleFactor: z / viewer.currentScale, origin })
     },
     search(query, dir) {
       const again = query === lastQuery

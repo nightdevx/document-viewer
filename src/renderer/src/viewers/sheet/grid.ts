@@ -1,6 +1,7 @@
 import type { OpenedFile, Viewer } from '../../../../shared/types'
 import { printNode } from '../../shell/print'
 import { emitStatus } from '../../shell/status'
+import { anchoredScroll } from '../../shell/zoom'
 import { checkZipSize, detectContainer, officeContainerError } from '../sniff'
 import { buildAxis, indexAt, searchCells, type Axis } from './axis'
 import { columnName } from './format'
@@ -320,12 +321,13 @@ export function createSheetViewer(): Viewer {
       selectSheet(Math.max(0, first))
       status()
     },
-    setZoom(z) {
-      const fx = scroller.scrollLeft / zoom
-      const fy = scroller.scrollTop / zoom
+    setZoom(z, anchor) {
+      const r = scroller.getBoundingClientRect()
+      const left = anchoredScroll(scroller.scrollLeft, (anchor?.x ?? r.left + r.width / 2) - r.left, zoom, z)
+      const top = anchoredScroll(scroller.scrollTop, (anchor?.y ?? r.top + r.height / 2) - r.top, zoom, z)
       zoom = z
       layout()
-      scroller.scrollTo(fx * zoom, fy * zoom)
+      scroller.scrollTo(left, top)
     },
     search(query, dir) {
       if (query !== lastQuery) {
