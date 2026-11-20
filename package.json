@@ -15,7 +15,7 @@
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 electron-vite dev",
     "build": "npm run typecheck && cross-env NODE_OPTIONS=--max-old-space-size=4096 electron-vite build",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vitest run --passWithNoTests",
-    "postinstall": "install-electron && electron-builder install-app-deps",
+    "postinstall": "node scripts/copy-pdfjs.mjs && install-electron && electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win"
   },
@@ -25,6 +25,7 @@
     "github-markdown-css": "^5.9.0",
     "lucide": "^1.77.0",
     "markdown-it": "^15.0.3",
+    "pdfjs-dist": "^6.5.438",
     "shiki": "^4.6.0"
   },
   "devDependencies": {

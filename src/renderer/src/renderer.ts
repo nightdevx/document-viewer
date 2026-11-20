@@ -16,7 +16,7 @@ import {
   X,
   type IconNode
 } from 'lucide'
-import type { OpenedFile, ViewerKind } from '../../shared/types'
+import type { OpenedFile, SearchResult, ViewerKind } from '../../shared/types'
 import { linkPolicy } from '../../shared/links'
 import { TabManager, type Tab } from './shell/tabs'
 import { clampZoom, nextZoom } from './shell/zoom'
@@ -199,16 +199,23 @@ async function openFileObject(f: File): Promise<void> {
 
 let lastQuery = ''
 
-function runSearch(dir: 1 | -1): void {
+function showCount(r: SearchResult): void {
+  searchCount.textContent = r.total ? `${r.index + 1} / ${r.total}` : 'Bulunamadı'
+  searchCount.classList.toggle('none', r.total === 0)
+}
+
+async function runSearch(dir: 1 | -1): Promise<void> {
   const tab = tm.active
   const q = searchInput.value.trim()
   if (!tab || !q) return resetSearch()
   if (q !== lastQuery) tab.viewer.clearSearch()
   lastQuery = q
-  const r = tab.viewer.search(q, dir)
-  searchCount.textContent = r.total ? `${r.index + 1} / ${r.total}` : 'Bulunamadı'
-  searchCount.classList.toggle('none', r.total === 0)
+  showCount(await tab.viewer.search(q, dir))
 }
+
+content.addEventListener('viewer-search', (e) => {
+  if (e.target === tm.active?.host && lastQuery) showCount((e as CustomEvent<SearchResult>).detail)
+})
 
 function resetSearch(): void {
   tm.active?.viewer.clearSearch()
@@ -310,7 +317,7 @@ window.api?.onOpenFiles(openPaths)
 if (import.meta.env.DEV && !window.api) {
   const names = new URLSearchParams(location.search).get('open')?.split(',').filter(Boolean) ?? []
   for (const name of names) {
-    const res = await fetch(`/${name}`)
+    const res = await fetch(`/test-files/${name}`)
     const data = await res.arrayBuffer()
     await tm.open({ path: name, name, ext: name.split('.').pop()!.toLowerCase(), size: data.byteLength, data })
   }

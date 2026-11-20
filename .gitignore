@@ -6,3 +6,6 @@ out
 *.log*
 test-files/local
 coverage
+src/renderer/public/pdfjs
+.playwright-mcp
+test-files/large-*

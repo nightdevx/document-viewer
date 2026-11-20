@@ -585,6 +585,49 @@ kbd {
   font: 12px/1.4 var(--font);
 }
 
+.pdf-container {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+
+.pdf-container .pdfViewer {
+  padding: 24px 0 48px;
+}
+
+.pdf-container .pdfViewer .page {
+  border: 0;
+  margin: 0 auto 16px;
+  box-shadow: var(--shadow);
+}
+
+.pdf-container .textLayer .highlight {
+  background-color: var(--highlight);
+  mix-blend-mode: multiply;
+}
+
+.pdf-container .textLayer .highlight.selected {
+  background-color: var(--highlight-current);
+}
+
+.text-input {
+  width: 100%;
+  height: 32px;
+  margin-top: 12px;
+  padding: 0 10px;
+  border: 1px solid var(--table-line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--paper-ink);
+  font: inherit;
+}
+
+.print-pages canvas {
+  display: block;
+  width: 100%;
+  break-after: page;
+}
+
 /* search matches: reserved highlighter colour, used nowhere else */
 ::highlight(search) {
   background-color: var(--highlight);

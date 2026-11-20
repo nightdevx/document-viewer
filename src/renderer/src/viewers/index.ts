@@ -7,6 +7,8 @@ export async function createViewer(file: OpenedFile): Promise<Viewer> {
   switch (pickViewer(file.ext)) {
     case 'code':
       return (await import('./code')).createCodeViewer()
+    case 'pdf':
+      return (await import('./pdf')).createPdfViewer()
     case 'markdown':
       return (await import('./markdown')).createMarkdownViewer()
     case 'unsupported':

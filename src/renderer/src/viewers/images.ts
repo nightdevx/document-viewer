@@ -34,7 +34,7 @@ export async function loadLocalImages(root: HTMLElement, docPath: string): Promi
       try {
         const data = window.api
           ? (await window.api.readFile(path)).data
-          : await (await fetch('/' + src)).arrayBuffer() // dev preview: test-files/
+          : await (await fetch('/test-files/' + src)).arrayBuffer() // dev preview
         const url = URL.createObjectURL(new Blob([data]))
         urls.push(url)
         img.src = url

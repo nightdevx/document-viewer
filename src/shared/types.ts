@@ -12,8 +12,11 @@ export interface Viewer {
   mount(host: HTMLElement, file: OpenedFile): Promise<void>
   /** 1 = 100%, clamped by the shell to 0.25..5 */
   setZoom(scale: number): void
-  /** Calling again with the same query moves to the next (1) or previous (-1) match. */
-  search(query: string, dir: 1 | -1): SearchResult
+  /**
+   * Calling again with the same query moves to the next (1) or previous (-1) match.
+   * Viewers whose count grows later (PDF) dispatch 'viewer-search' on their host with the new SearchResult.
+   */
+  search(query: string, dir: 1 | -1): SearchResult | Promise<SearchResult>
   clearSearch(): void
   /** Fills #print-root and calls api.print(). */
   print(): Promise<void>
