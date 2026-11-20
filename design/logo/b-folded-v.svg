@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- B: a sheet with its top-right corner folded down; the fold and the cut edge draw a V -->
+  <path fill="#000" d="M68 28h86l50 50v134a16 16 0 0 1-16 16H68a16 16 0 0 1-16-16V44a16 16 0 0 1 16-16Z
+    M154 28v34a16 16 0 0 0 16 16h34Z" fill-rule="evenodd"/>
+  <path fill="#000" d="M166 28l38 38h-30a8 8 0 0 1-8-8Z" opacity="0"/>
+</svg>

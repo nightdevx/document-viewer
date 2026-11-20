@@ -1,0 +1,55 @@
+# Builds the installer and publishes it when a version tag is pushed.
+# The release notes are the tag's message:
+#   git tag -a v1.2.3 -F notes.md
+#   git push origin v1.2.3
+# Run by hand (Actions → Release → Run workflow) it only builds it, as a downloadable artifact.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Tests
+        run: npm test
+
+      - name: Installer
+        run: |
+          npm run build
+          if ($LASTEXITCODE) { exit 1 }
+          npx electron-builder --win --publish never --config.directories.output=dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer
+          path: dist/*.exe
+
+      - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          # Checkout leaves the tag without its message; fetch the tag itself for the notes.
+          git fetch --force origin "refs/tags/${tag}:refs/tags/${tag}"
+          $files = (Get-ChildItem dist\*.exe).FullName
+          gh release create $tag @files --title "Document Viewer $($tag.TrimStart('v'))" --notes-from-tag --verify-tag

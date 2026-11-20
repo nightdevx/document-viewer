@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-20T00:00:00Z",
+  "title": "Design System: Document Viewer",
+  "extensions": {
+    "colorMeta": {
+      "rail": { "role": "neutral", "displayName": "Graphite Rail", "canonical": "oklch(0.29 0.005 255)", "tonalRamp": ["oklch(0.15 0.005 255)", "oklch(0.2 0.005 255)", "oklch(0.29 0.005 255)", "oklch(0.36 0.005 255)", "oklch(0.5 0.005 255)", "oklch(0.7 0.005 255)", "oklch(0.88 0.004 255)", "oklch(0.96 0.004 255)"] },
+      "table": { "role": "neutral", "displayName": "Table Grey", "canonical": "oklch(0.885 0.005 255)", "tonalRamp": ["oklch(0.27 0.005 255)", "oklch(0.31 0.005 255)", "oklch(0.42 0.005 255)", "oklch(0.58 0.005 255)", "oklch(0.74 0.005 255)", "oklch(0.82 0.005 255)", "oklch(0.885 0.005 255)", "oklch(0.95 0.003 255)"] },
+      "pencil": { "role": "primary", "displayName": "Pencil Orange", "canonical": "oklch(0.72 0.165 55)", "tonalRamp": ["oklch(0.22 0.04 55)", "oklch(0.35 0.1 50)", "oklch(0.5 0.15 45)", "oklch(0.64 0.17 50)", "oklch(0.72 0.165 55)", "oklch(0.8 0.12 60)", "oklch(0.9 0.06 65)", "oklch(0.96 0.025 70)"] },
+      "highlight": { "role": "secondary", "displayName": "Highlighter", "canonical": "oklch(0.93 0.17 120)", "tonalRamp": ["oklch(0.4 0.12 125)", "oklch(0.55 0.16 125)", "oklch(0.7 0.19 125)", "oklch(0.85 0.2 125)", "oklch(0.93 0.17 120)", "oklch(0.95 0.12 120)", "oklch(0.97 0.07 120)", "oklch(0.985 0.03 120)"] }
+    },
+    "typographyMeta": {
+      "body": { "displayName": "Body", "purpose": "All shell text; tabular numerals on." },
+      "reading": { "displayName": "Reading", "purpose": "Markdown documents, 860px max width." },
+      "code": { "displayName": "Code", "purpose": "Code documents with line-number gutter." }
+    },
+    "shadows": [
+      { "name": "sheet", "value": "0 1px 2px oklch(0.2 0.01 255 / 0.18), 0 6px 18px oklch(0.2 0.01 255 / 0.14)", "purpose": "Document pages, notice and dialog over the table." }
+    ],
+    "motion": [
+      { "name": "state-fade", "value": "160ms ease-out", "purpose": "Drop-target border and background change; disabled under reduced motion." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Primary Button", "kind": "button", "refersTo": "button-primary",
+      "description": "Single main action, pencil fill.",
+      "html": "<button class=\"ds-btn-primary\">Open file</button>",
+      "css": ".ds-btn-primary{height:32px;padding:0 16px;border:1px solid var(--pencil-strong);border-radius:4px;background:var(--pencil);color:var(--pencil-ink);font:inherit;font-weight:600;cursor:pointer}.ds-btn-primary:hover{background:color-mix(in oklch,var(--pencil) 88%,white)}.ds-btn-primary:focus-visible{outline:2px solid var(--pencil);outline-offset:1px}"
+    },
+    {
+      "name": "Secondary Button", "kind": "button", "refersTo": "button-secondary",
+      "description": "Transparent button with hairline border.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary{height:32px;padding:0 16px;border:1px solid var(--table-line);border-radius:4px;background:transparent;color:inherit;font:inherit;font-weight:600;cursor:pointer}.ds-btn-secondary:hover{background:color-mix(in oklch,var(--table-ink) 8%,transparent)}.ds-btn-secondary:focus-visible{outline:2px solid var(--pencil);outline-offset:1px}"
+    },
+    {
+      "name": "Search Field", "kind": "input", "refersTo": "search-field",
+      "description": "Sunken field on the rail; border turns pencil on focus.",
+      "html": "<label class=\"ds-search\"><input placeholder=\"Search\"><span class=\"ds-count\">3 / 12</span></label>",
+      "css": ".ds-search{display:flex;align-items:center;width:260px;height:32px;padding:0 6px 0 8px;border:1px solid var(--rail-line);border-radius:4px;background:var(--rail-sunken);color:var(--rail-ink)}.ds-search:focus-within{border-color:var(--pencil)}.ds-search input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;color:inherit;font:inherit}.ds-count{color:var(--rail-ink-muted);white-space:nowrap}"
+    },
+    {
+      "name": "Tab", "kind": "nav", "refersTo": "tab-selected",
+      "description": "Rail tab; selected has a raised fill and a 2px pencil underline.",
+      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab\">notes.md</button><button class=\"ds-tab\" aria-selected=\"true\">report.pdf</button></div>",
+      "css": ".ds-tabs{display:flex;background:var(--rail);height:40px}.ds-tab{position:relative;min-width:120px;padding:0 12px;border:0;border-right:1px solid var(--rail-line);background:transparent;color:var(--rail-ink-muted);font:inherit;cursor:default}.ds-tab:hover{background:color-mix(in oklch,var(--rail-raised) 60%,var(--rail));color:var(--rail-ink)}.ds-tab[aria-selected=true]{background:var(--rail-raised);color:var(--rail-ink)}.ds-tab[aria-selected=true]::after{content:'';position:absolute;inset:auto 0 0 0;height:2px;background:var(--pencil)}.ds-tab:focus-visible{outline:2px solid var(--pencil);outline-offset:-2px}"
+    },
+    {
+      "name": "Zoom Ruler", "kind": "custom", "refersTo": "zoom-ruler",
+      "description": "Signature control: ticks every real centimetre at the current zoom, percentage at the bottom.",
+      "html": "<button class=\"ds-ruler\"><span class=\"ds-ticks\"></span><span class=\"ds-value\">100%</span></button>",
+      "css": ".ds-ruler{position:relative;display:flex;align-items:flex-end;width:112px;height:32px;padding:0;border:1px solid var(--rail-line);border-radius:4px;background:var(--rail-sunken);overflow:hidden;cursor:pointer;color:var(--rail-ink)}.ds-ruler:hover{border-color:var(--rail-ink-muted)}.ds-ticks{position:absolute;inset:0;--cm:38px;--minor:19px;background:linear-gradient(var(--rail-ink-muted),var(--rail-ink-muted)) 0 0/100% 1px no-repeat,linear-gradient(to right,var(--rail-ink) 1px,transparent 1px) 1px 0/var(--cm) 10px repeat-x,linear-gradient(to right,var(--rail-ink-muted) 1px,transparent 1px) 1px 0/var(--minor) 5px repeat-x}.ds-value{position:relative;width:100%;padding-bottom:3px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}.ds-ruler:focus-visible{outline:2px solid var(--pencil);outline-offset:1px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Drafting Table",
+    "overview": "The document lies on a quiet graphite table and the instruments sit at the edges. A 40px rail on top and a 28px status rail on the bottom frame the sheet; everything between belongs to the document.",
+    "keyCharacteristics": [
+      "Two graphite rails frame a mid-grey table; the document is the brightest thing on screen.",
+      "One accent (pencil orange) for active and actionable states; one reserved highlighter for search matches.",
+      "Tabular numerals for all figures; native Windows UI typeface.",
+      "32px minimum hit targets, hairline borders, 4px radii.",
+      "Follows the OS light or dark setting; documents stay on white sheets in both."
+    ],
+    "rules": [
+      { "name": "The One Pencil Rule", "body": "Pencil orange appears only on active or actionable elements. It never decorates headings, backgrounds or icons at rest.", "section": "colors" },
+      { "name": "The Reserved Highlighter Rule", "body": "Highlighter yellow-green means \"search match\" and nothing else.", "section": "colors" },
+      { "name": "The White Sheet Rule", "body": "Rendered document pages are white in both themes; the dark theme deepens the table and rails around them, never the page.", "section": "colors" },
+      { "name": "The Tabular Rule", "body": "Tabular numerals are on at the body level so every figure aligns and does not jitter.", "section": "typography" },
+      { "name": "The Lift-Only-The-Page Rule", "body": "Chrome stays flat; the shadow belongs to the sheet and to transient overlays.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the document the brightest, largest thing on screen; chrome stays graphite.",
+      "Do spend pencil orange only on active tab, focus, selection, primary action and drop target.",
+      "Do keep every control at least 32px square.",
+      "Do add new colours as OKLCH custom properties on `:root` with a dark override, not as literals in components.",
+      "Do show figures in tabular numerals.",
+      "Do follow the OS theme and keep rendered pages white."
+    ],
+    "donts": [
+      "Don't use a generic grey toolbar with a blue accent.",
+      "Don't use highlighter yellow-green for anything but search matches.",
+      "Don't add a second accent colour, gradients, or decorative ornament to the shell.",
+      "Don't put shadows on rails, tabs, buttons or fields.",
+      "Don't exceed 4px radii on controls."
+    ]
+  }
+}

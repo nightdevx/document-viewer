@@ -1,0 +1,46 @@
+appId: com.nightdijital.documentviewer
+productName: Document Viewer
+copyright: Copyright © 2026 nightdijital
+directories:
+  buildResources: build
+  # Outside OneDrive so sync does not churn on build output.
+  output: ${env.LOCALAPPDATA}/document-viewer-build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!scripts/*'
+  - '!test-files/*'
+  - '!.impeccable/*'
+  - '!.playwright-mcp/*'
+  - '!{docs,design,.github}/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md,README.tr.md,PLAN.md,PRODUCT.md,DESIGN.md,LICENSE}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - resources/**
+win:
+  executableName: document-viewer
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  artifactName: DocumentViewer-Setup-${version}.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+# Registers the app under "Open with" for these types; Windows lets only the user pick the default.
+fileAssociations:
+  - { ext: pdf, name: PDF, description: PDF belgesi, role: Viewer }
+  - { ext: docx, name: Word, description: Word belgesi, role: Viewer }
+  - { ext: [xlsx, xls], name: Excel, description: Excel çalışma kitabı, role: Viewer }
+  - { ext: csv, name: CSV, description: CSV dosyası, role: Viewer }
+  - { ext: pptx, name: PowerPoint, description: PowerPoint sunusu, role: Viewer }
+  - { ext: [md, markdown], name: Markdown, description: Markdown belgesi, role: Viewer }
+  - { ext: [txt, log], name: Metin, description: Metin dosyası, role: Viewer }
+  - { ext: [json, xml, yaml, yml, toml, ini], name: Veri, description: Veri dosyası, role: Viewer }
+  - ext: [js, ts, jsx, tsx, py, cs, java, c, cpp, h, go, rs, php, rb, sh, ps1, bat, sql, css, scss, html]
+    name: Kod
+    description: Kaynak kod dosyası
+    role: Viewer
+npmRebuild: false

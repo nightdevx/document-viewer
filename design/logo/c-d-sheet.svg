@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- C: a D whose counter is a portrait sheet -->
+  <path fill="#000" fill-rule="evenodd" d="M48 28h76a92 100 0 0 1 0 200H48Z
+    M86 70h34a10 10 0 0 1 10 10v96a10 10 0 0 1-10 10H86Z"/>
+</svg>
