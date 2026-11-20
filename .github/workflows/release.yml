@@ -51,5 +51,6 @@ jobs:
           $tag = '${{ github.ref_name }}'
           # Checkout leaves the tag without its message; fetch the tag itself for the notes.
           git fetch --force origin "refs/tags/${tag}:refs/tags/${tag}"
-          $files = (Get-ChildItem dist\*.exe).FullName
+          # @() keeps a single installer an array; a bare string would be splatted character by character.
+          $files = @((Get-ChildItem dist\*.exe).FullName)
           gh release create $tag @files --title "Document Viewer $($tag.TrimStart('v'))" --notes-from-tag --verify-tag
