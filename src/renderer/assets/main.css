@@ -628,6 +628,209 @@ kbd {
   break-after: page;
 }
 
+/* spreadsheet: the sheet stays white like paper in both themes */
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--table-ink-muted);
+}
+
+.sheet-view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-scroll {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+
+.sheet-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.sheet-layer {
+  position: sticky;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  font: 14.67px/1.2 Calibri, Carlito, 'Segoe UI', sans-serif;
+  color: #000;
+  font-variant-numeric: normal;
+}
+
+.sheet-layer .cell {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  padding: 0 3px;
+  overflow: hidden;
+  white-space: pre;
+  background: #fff;
+  box-shadow: inset -1px -1px 0 #e1e1e1;
+  cursor: cell;
+}
+
+.sheet-layer .cell.spill {
+  z-index: 2;
+  background: transparent;
+}
+
+.sheet-layer .cell.wrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sheet-layer .cell > span {
+  min-width: 0;
+}
+
+.sheet-layer .cell.fr,
+.sheet-layer .cell.fc {
+  z-index: 3;
+}
+
+.sheet-layer .cell.frfc {
+  z-index: 4;
+}
+
+.sheet-layer .cell.selected {
+  outline: 2px solid var(--pencil-strong);
+  outline-offset: -2px;
+  z-index: 5;
+}
+
+.sheet-image {
+  position: absolute;
+  z-index: 2;
+}
+
+.col-head,
+.row-head,
+.corner {
+  position: absolute;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  background: #f3f3f3;
+  color: #444;
+  font: 12px var(--font);
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset -1px -1px 0 #d4d4d4;
+  user-select: none;
+}
+
+.col-head {
+  top: 0;
+  height: 22px;
+}
+
+.row-head {
+  left: 0;
+  width: 48px;
+}
+
+.col-head.fc,
+.row-head.fr {
+  z-index: 7;
+}
+
+.col-head.active,
+.row-head.active {
+  background: #e3e3e3;
+  color: #000;
+  box-shadow: inset -1px -1px 0 #d4d4d4, inset 0 -2px 0 var(--pencil-strong);
+}
+
+.row-head.active {
+  box-shadow: inset -1px -1px 0 #d4d4d4, inset -2px 0 0 var(--pencil-strong);
+}
+
+.corner {
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 22px;
+  z-index: 8;
+}
+
+.freeze-line {
+  position: absolute;
+  z-index: 7;
+  background: #9a9a9a;
+}
+
+.freeze-line.h {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.freeze-line.v {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.sheet-tabs {
+  display: flex;
+  gap: 2px;
+  min-height: 32px;
+  padding: 0 8px;
+  overflow-x: auto;
+  background: var(--table);
+  border-top: 1px solid var(--table-line);
+  scrollbar-width: thin;
+}
+
+.sheet-tab {
+  position: relative;
+  min-height: 32px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--table-ink-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sheet-tab:hover {
+  color: var(--table-ink);
+  background: color-mix(in oklch, var(--table-ink) 6%, transparent);
+}
+
+.sheet-tab[aria-selected='true'] {
+  color: var(--table-ink);
+  font-weight: 600;
+}
+
+.sheet-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0 8px auto;
+  height: 2px;
+  background: var(--pencil);
+}
+
+.print-sheet {
+  border-collapse: collapse;
+  font: 10pt Calibri, sans-serif;
+}
+
+.print-sheet td {
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+  white-space: pre;
+}
+
 /* search matches: reserved highlighter colour, used nowhere else */
 ::highlight(search) {
   background-color: var(--highlight);

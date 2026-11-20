@@ -9,6 +9,8 @@ export async function createViewer(file: OpenedFile): Promise<Viewer> {
       return (await import('./code')).createCodeViewer()
     case 'pdf':
       return (await import('./pdf')).createPdfViewer()
+    case 'sheet':
+      return (await import('./sheet/grid')).createSheetViewer()
     case 'markdown':
       return (await import('./markdown')).createMarkdownViewer()
     case 'unsupported':
