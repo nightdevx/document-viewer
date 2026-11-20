@@ -1,0 +1,2 @@
+Şirket;Tutar
+Işık A.Ş.;1250,5

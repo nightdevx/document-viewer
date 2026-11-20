@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- B: four crop marks frame an empty portrait sheet: the document is whatever you open -->
+  <path fill="#000" d="M44 28h64v26H70v38H44Z M212 28v64h-26V54h-38V28Z M44 228v-64h26v38h38v26Z M212 228h-64v-26h38v-38h26Z"/>
+</svg>

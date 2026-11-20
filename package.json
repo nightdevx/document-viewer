@@ -1,0 +1,62 @@
+{
+  "name": "document-viewer",
+  "version": "1.0.0",
+  "description": "A document viewer for Windows: PDF, Word, Excel, PowerPoint, Markdown and code in one tabbed window",
+  "main": "./out/main/index.js",
+  "author": "nightdijital <iletisim@nightdijital.com>",
+  "homepage": "https://nightdijital.com",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "start": "cross-env NODE_OPTIONS=--max-old-space-size=4096 electron-vite preview",
+    "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 electron-vite dev",
+    "build": "npm run typecheck && cross-env NODE_OPTIONS=--max-old-space-size=4096 electron-vite build",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vitest run --passWithNoTests",
+    "postinstall": "node scripts/copy-pdfjs.mjs && install-electron && electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win"
+  },
+  "dependencies": {
+    "@electron-toolkit/utils": "^4.0.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^3.0.1",
+    "@electron-toolkit/eslint-config-ts": "^4.0.0",
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^24.19.2",
+    "cross-env": "^10.1.0",
+    "docx-preview": "^0.4.1",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^6.0.0",
+    "eslint": "^10.12.0",
+    "exceljs": "^4.4.0",
+    "github-markdown-css": "^5.9.0",
+    "happy-dom": "^21.0.4",
+    "jszip": "^3.10.2",
+    "lucide": "^1.77.0",
+    "markdown-it": "^15.0.3",
+    "pdfjs-dist": "^6.5.438",
+    "pptx-preview": "^1.0.7",
+    "prettier": "^3.9.10",
+    "shiki": "^4.6.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.1.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nightdevx/document-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nightdevx/document-viewer/issues"
+  },
+  "license": "MIT"
+}

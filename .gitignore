@@ -1,0 +1,11 @@
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
+test-files/local
+coverage
+src/renderer/public/pdfjs
+.playwright-mcp
+test-files/large-*
