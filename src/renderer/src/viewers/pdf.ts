@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = workerUrl
 // Copied from pdfjs-dist by scripts/copy-pdfjs.mjs into the renderer's public folder.
 const assets = new URL('pdfjs/', document.baseURI).href
 
-function askPassword(host: HTMLElement, wrong: boolean): Promise<string | null> {
+function askPassword(wrong: boolean): Promise<string | null> {
   const dialog = document.createElement('dialog')
   dialog.className = 'dialog'
   dialog.innerHTML = `<form method="dialog">
@@ -24,7 +24,8 @@ function askPassword(host: HTMLElement, wrong: boolean): Promise<string | null> 
       </div></form>`
   dialog.querySelector('h2')!.textContent = 'Bu PDF şifreli'
   dialog.querySelector('p')!.textContent = wrong ? 'Şifre yanlış, tekrar dene.' : 'Açmak için şifresini gir.'
-  host.append(dialog)
+  // On <body>: inside a hidden tab host the open modal would be invisible yet block the window.
+  document.body.append(dialog)
   dialog.showModal()
   return new Promise((resolve) =>
     dialog.addEventListener('close', () => {
@@ -91,7 +92,7 @@ export function createPdfViewer(): Viewer {
         enableXfa: false
       })
       task.onPassword = async (update: (pw: string) => void, reason: number) => {
-        const pw = await askPassword(host, reason === pdfjs.PasswordResponses.INCORRECT_PASSWORD)
+        const pw = await askPassword(reason === pdfjs.PasswordResponses.INCORRECT_PASSWORD)
         if (pw === null) task?.destroy()
         else update(pw)
       }
@@ -160,6 +161,8 @@ export function createPdfViewer(): Viewer {
       await printNode(pages)
     },
     dispose() {
+      // setDocument(null) also removes the viewer's document-level listeners.
+      viewer?.setDocument(null as never)
       task?.destroy()
     }
   }

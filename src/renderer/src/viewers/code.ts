@@ -5,7 +5,8 @@ import { emitStatus } from '../shell/status'
 import { highlight, languageFor } from './highlight'
 import { decodeText, isBinary } from './text-decode'
 
-const PLAIN_ABOVE = 5 * 1024 * 1024
+// Highlighting runs on the main thread: a 4.8 MB log took 2.8 s, so stay well below that.
+const PLAIN_ABOVE = 1024 * 1024
 
 export function createCodeViewer(): Viewer {
   let doc: HTMLElement

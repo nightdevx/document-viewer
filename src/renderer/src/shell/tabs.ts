@@ -56,12 +56,14 @@ export class TabManager {
     this.activate(tab.id)
     try {
       tab.viewer = await this.opts.createViewer(file)
-      await tab.viewer.mount(host, file)
+      if (this.tabs.includes(tab)) await tab.viewer.mount(host, file)
     } catch (e) {
       tab.failed = true
       host.replaceChildren(errorScreen(file.name, e instanceof Error ? e.message : String(e)))
       this.opts.onChange()
     }
+    // Closed while loading: close() only saw the stand-in, so release the real viewer now.
+    if (!this.tabs.includes(tab)) tab.viewer.dispose()
     return tab
   }
 
@@ -77,6 +79,7 @@ export class TabManager {
     const i = this.tabs.findIndex((t) => t.id === id)
     if (i < 0) return
     const [tab] = this.tabs.splice(i, 1)
+    this.pending.delete(normalizePath(tab.file.path))
     tab.viewer.dispose()
     tab.host.remove()
     if (this.active === tab) {

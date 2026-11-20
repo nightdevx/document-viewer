@@ -84,6 +84,33 @@ describe('TabManager', () => {
     expect(tm.tabs).toHaveLength(2)
   })
 
+  it('a tab closed while its viewer is still mounting is disposed once mounting ends, and can be reopened', async () => {
+    const content = document.createElement('div')
+    let release!: () => void
+    const viewers: Viewer[] = []
+    const tm = new TabManager({
+      content,
+      createViewer: async () => {
+        const v = fakeViewer()
+        viewers.push(v)
+        // The first viewer is still being imported when the tab is closed.
+        if (viewers.length === 1) await new Promise<void>((r) => (release = r))
+        return v
+      },
+      onChange: () => {}
+    })
+    const opening = tm.open(file('C:\\yavas.xlsx'))
+    await Promise.resolve()
+    tm.close(tm.tabs[0].id)
+    release()
+    await opening
+    expect(viewers[0].dispose).toHaveBeenCalled()
+    expect(tm.tabs).toHaveLength(0)
+    const again = await tm.open(file('C:\\yavas.xlsx'))
+    expect(tm.tabs).toEqual([again])
+    expect(viewers).toHaveLength(2)
+  })
+
   it('close disposes the viewer once and removes its host', async () => {
     const { tm, content, viewers } = setup()
     const a = await tm.open(file('C:\\a.txt'))

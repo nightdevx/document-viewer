@@ -24,3 +24,12 @@ describe('contextualSpacingCss', () => {
     expect(contextualSpacingCss('<not xml')).toBe('')
   })
 })
+
+describe('contextualSpacingCss escaping', () => {
+  it('escapes style ids so XML cannot inject CSS rules', () => {
+    const xml = `<w:styles ${W}><w:style w:type="paragraph" w:styleId="x{}body{background:url(file://evil/a)}"><w:pPr><w:contextualSpacing/></w:pPr></w:style></w:styles>`
+    const css = contextualSpacingCss(xml)
+    expect(css).not.toMatch(/\}\s*body\s*\{/)
+    expect(css).toContain('\\{')
+  })
+})

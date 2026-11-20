@@ -32,6 +32,22 @@ describe('checkZipSize', () => {
     expect(() => checkZipSize(zip, 10)).toThrow('ZIP_TOO_LARGE')
   })
 
+  it('counts every central directory entry even when the end record understates the count', async () => {
+    const z = new JSZip()
+    z.file('a.xml', 'a'.repeat(600))
+    z.file('b.xml', 'b'.repeat(600))
+    const zip = await z.generateAsync({ type: 'arraybuffer', compression: 'DEFLATE' })
+    const v = new DataView(zip)
+    for (let i = zip.byteLength - 22; i >= 0; i--) {
+      if (v.getUint32(i, true) === 0x06054b50) {
+        v.setUint16(i + 8, 1, true)
+        v.setUint16(i + 10, 1, true)
+        break
+      }
+    }
+    expect(() => checkZipSize(zip, 1000)).toThrow('ZIP_TOO_LARGE')
+  })
+
   it('rejects data without a zip directory', () => {
     expect(() => checkZipSize(text('not a zip at all'))).toThrow('ZIP_CORRUPT')
   })

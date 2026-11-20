@@ -5,6 +5,7 @@ import { createDomSearch, type DomSearch } from '../shell/dom-search'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { assertOfficeZip } from './docx'
+import { revokeBlobUrls } from './blobs'
 import { guardImages } from './images'
 import { describeSlide } from './paper'
 
@@ -116,6 +117,7 @@ export function createPptxViewer(): Viewer {
       observer?.disconnect()
       search?.clear()
       previewer?.destroy()
+      revokeBlobUrls(deck)
     }
   }
 }

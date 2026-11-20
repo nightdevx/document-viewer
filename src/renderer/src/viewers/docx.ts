@@ -5,6 +5,7 @@ import { createDomSearch, type DomSearch } from '../shell/dom-search'
 import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { contextualSpacingCss } from './docx-fixes'
+import { revokeBlobUrls } from './blobs'
 import { guardImages } from './images'
 import { describePage } from './paper'
 import { checkZipSize, officeContainerError } from './sniff'
@@ -91,6 +92,8 @@ export function createDocxViewer(): Viewer {
     dispose() {
       observer?.disconnect()
       search?.clear()
+      // docx-preview makes a blob URL per image and font and never frees them.
+      revokeBlobUrls(doc)
     }
   }
 }

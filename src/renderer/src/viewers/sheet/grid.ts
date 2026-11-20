@@ -1,7 +1,7 @@
 import type { OpenedFile, Viewer } from '../../../../shared/types'
 import { printNode } from '../../shell/print'
 import { emitStatus } from '../../shell/status'
-import { checkZipSize, officeContainerError } from '../sniff'
+import { checkZipSize, detectContainer, officeContainerError } from '../sniff'
 import { buildAxis, indexAt, searchCells, type Axis } from './axis'
 import { columnName } from './format'
 import type { CellStyle, Merge, SheetModel, WorkbookModel } from './model'
@@ -26,15 +26,17 @@ const BORDER: Record<string, string> = {
 const JUSTIFY: Record<string, string> = { left: 'flex-start', center: 'center', centerContinuous: 'center', right: 'flex-end', fill: 'flex-start', justify: 'flex-start', distributed: 'center' }
 const ALIGN: Record<string, string> = { top: 'flex-start', middle: 'center', bottom: 'flex-end', justify: 'flex-start', distributed: 'center' }
 
-function parse(file: OpenedFile): Promise<WorkbookModel> & { worker: Worker } {
+function parse(file: OpenedFile): Promise<WorkbookModel> & { worker: Worker; cancel: () => void } {
   const worker = new SheetWorker()
+  let cancel = (): void => {}
   const p = new Promise<WorkbookModel>((resolve, reject) => {
+    cancel = () => reject(new Error('Kapatıldı.'))
     worker.onmessage = (e: MessageEvent<SheetReply>) => (e.data.ok ? resolve(e.data.model) : reject(new Error('Çalışma kitabı okunamadı. Dosya bozuk olabilir.')))
     worker.onerror = () => reject(new Error('Çalışma kitabı okunamadı.'))
     const req: SheetRequest = { data: file.data.slice(0), ext: file.ext as SheetRequest['ext'], locale: navigator.language || 'tr-TR' }
     worker.postMessage(req, [req.data])
   })
-  return Object.assign(p, { worker })
+  return Object.assign(p, { worker, cancel: () => cancel() })
 }
 
 function styleCell(el: HTMLElement, s: CellStyle, isNumber: boolean): void {
@@ -61,6 +63,7 @@ export function createSheetViewer(): Viewer {
   let host: HTMLElement
   let model: WorkbookModel
   let worker: Worker | null = null
+  let cancelParse = (): void => {}
   let sheet: SheetModel
   let rows: Axis
   let cols: Axis
@@ -257,7 +260,8 @@ export function createSheetViewer(): Viewer {
   return {
     async mount(h, file) {
       host = h
-      if (file.ext === 'xlsx') {
+      // SheetJS sniffs content, so an xlsx renamed to .xls is still a zip: guard every zip.
+      if (file.ext === 'xlsx' || detectContainer(file.data) === 'zip') {
         const problem = officeContainerError(file.data)
         if (problem) throw new Error(problem)
         try {
@@ -272,6 +276,7 @@ export function createSheetViewer(): Viewer {
       host.replaceChildren(loading)
       const job = parse(file)
       worker = job.worker
+      cancelParse = job.cancel
       try {
         model = await job
       } finally {
@@ -369,6 +374,7 @@ export function createSheetViewer(): Viewer {
     },
     dispose() {
       worker?.terminate()
+      cancelParse()
       cancelAnimationFrame(frame)
       blobs.forEach((u) => URL.revokeObjectURL(u))
     }

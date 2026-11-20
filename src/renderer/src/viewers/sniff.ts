@@ -21,6 +21,8 @@ export function officeContainerError(buf: ArrayBuffer): string | null {
 /**
  * Zip-bomb guard: sums the uncompressed sizes in the central directory and throws
  * ZIP_TOO_LARGE above maxTotal. ZIP64 markers are treated as too large; Office files never need them.
+ * ponytail: trusts the declared sizes; a zip that lies about them is inflated in full by JSZip.
+ * The renderer reloads if that exhausts memory (render-process-gone); stream-inflate with a cap if it matters.
  */
 export function checkZipSize(buf: ArrayBuffer, maxTotal = 1_000_000_000): void {
   const v = new DataView(buf)
@@ -33,16 +35,16 @@ export function checkZipSize(buf: ArrayBuffer, maxTotal = 1_000_000_000): void {
     }
   }
   if (eocd < 0) throw corrupt()
-  const entries = v.getUint16(eocd + 10, true)
   let p = v.getUint32(eocd + 16, true)
-  if (entries === 0xffff || p === 0xffffffff) throw new Error('ZIP_TOO_LARGE')
+  if (p === 0xffffffff) throw new Error('ZIP_TOO_LARGE')
+  // Walk headers by signature: the entry count in the end record can understate what a reader inflates.
   let total = 0
-  for (let n = 0; n < entries; n++) {
-    if (p + 46 > buf.byteLength || v.getUint32(p, true) !== 0x02014b50) throw corrupt()
+  while (p + 46 <= eocd && v.getUint32(p, true) === 0x02014b50) {
     const size = v.getUint32(p + 24, true)
     if (size === 0xffffffff) throw new Error('ZIP_TOO_LARGE')
     total += size
     if (total > maxTotal) throw new Error('ZIP_TOO_LARGE')
     p += 46 + v.getUint16(p + 28, true) + v.getUint16(p + 30, true) + v.getUint16(p + 32, true)
   }
+  if (p === v.getUint32(eocd + 16, true)) throw corrupt()
 }

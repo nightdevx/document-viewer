@@ -5,7 +5,10 @@ const attr = (el: Element, name: string): string | null => el.getAttribute(`w:${
 const child = (el: Element, name: string): Element | undefined => el.getElementsByTagName(`w:${name}`)[0]
 
 /** docx-preview's class for a style id (see its escapeClassName). */
-const styleClass = (id: string): string => `docx_${id.replace(/[ .]+/g, '-').replace(/[&]+/g, 'and').toLowerCase()}`
+const styleClass = (id: string): string =>
+  `docx_${id.replace(/[ .]+/g, '-').replace(/[&]+/g, 'and').toLowerCase()}`
+    // Style ids come from the document: escape everything that could end the selector.
+    .replace(/[^\w-]/g, (ch) => '\\' + ch)
 
 /**
  * Word's "don't add space between paragraphs of the same style" (w:contextualSpacing), which

@@ -83,6 +83,16 @@ describe('parseWorkbook (csv, xls)', () => {
     expect(s.cells.get('1,0')?.text).toBe('Işık')
   })
 
+  it('keeps CSV text exactly as written (Turkish numbers, leading zeros, dates)', async () => {
+    const csv = 'Tutar;Kod;Telefon;Tarih\r\n12,5;06100;05321234567;03/04/2026\r\n1.234,50;0;-7;x\r\n'
+    const model = await parseWorkbook(new TextEncoder().encode(csv).buffer as ArrayBuffer, 'csv', 'tr-TR')
+    const s = model.sheets[0]
+    expect(['1,0', '1,1', '1,2', '1,3', '2,0'].map((k) => s.cells.get(k)?.text)).toEqual(['12,5', '06100', '05321234567', '03/04/2026', '1.234,50'])
+    expect(s.cells.get('1,0')?.isNumber).toBe(true)
+    expect(s.cells.get('2,2')?.isNumber).toBe(true)
+    expect(s.cells.get('1,3')?.isNumber).toBe(false)
+  })
+
   it('reads xls values through SheetJS', async () => {
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Ad', 'Tutar'], ['Ayşe', 1234.5]]), 'Sayfa1')

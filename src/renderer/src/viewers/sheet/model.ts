@@ -258,6 +258,9 @@ async function fromExcelJS(data: ArrayBuffer, locale: string): Promise<WorkbookM
   return { sheets, styles: table.styles, activeSheet: active }
 }
 
+/** CSV text that reads as a number in either locale, so it right-aligns like Excel would show it. */
+const NUMERIC_TEXT = /^[-+]?\d{1,3}(?:([.,])\d{3}(?:\1\d{3})*)?(?:[.,]\d+)?%?$|^[-+]?\d+(?:[.,]\d+)?%?$/
+
 // ---------- xls and csv through SheetJS (values only, no styles in the community build) ----------
 
 function fromSheetJS(wb: XLSX.WorkBook, locale: string): WorkbookModel {
@@ -276,7 +279,7 @@ function fromSheetJS(wb: XLSX.WorkBook, locale: string): WorkbookModel {
           sheet.cells.set(`${r},${c}`, {
             text: formatCell(value, String(cell.z ?? 'General'), locale),
             style: 0,
-            isNumber: cell.t === 'n' || cell.t === 'd'
+            isNumber: cell.t === 'n' || cell.t === 'd' || (cell.t === 's' && NUMERIC_TEXT.test(String(cell.v)))
           })
         }
       }
@@ -301,6 +304,7 @@ function fromSheetJS(wb: XLSX.WorkBook, locale: string): WorkbookModel {
 
 export async function parseWorkbook(data: ArrayBuffer, ext: 'xlsx' | 'xls' | 'csv', locale: string): Promise<WorkbookModel> {
   if (ext === 'xlsx') return fromExcelJS(data, locale)
-  if (ext === 'csv') return fromSheetJS(XLSX.read(decodeText(data), { type: 'string', cellDates: true }), locale)
+  // raw: CSV cells keep their text (12,5 / 06100 / 03/04/2026) instead of SheetJS's US-locale guesses.
+  if (ext === 'csv') return fromSheetJS(XLSX.read(decodeText(data), { type: 'string', raw: true }), locale)
   return fromSheetJS(XLSX.read(new Uint8Array(data), { type: 'array', cellDates: true }), locale)
 }
