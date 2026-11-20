@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "src/renderer/index.html"
+        ],
+        "createdAt": "2026-11-20T16:32:49.228Z",
+        "reason": "Claude: #adb1b7 is the dark-theme --table-ink-muted (oklch 0.76) on the dark table (oklch 0.31), about 6:1; the static scan pairs dark-theme text with a white background"
+      }
+    ]
+  }
+}

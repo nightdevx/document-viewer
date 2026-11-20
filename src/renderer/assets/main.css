@@ -3,6 +3,7 @@
   color-scheme: light dark;
   --rail: oklch(0.29 0.012 255);
   --rail-raised: oklch(0.36 0.014 255);
+  --rail-sunken: oklch(0.22 0.01 255);
   --rail-line: oklch(0.42 0.012 255);
   --rail-ink: oklch(0.96 0.004 255);
   --rail-ink-muted: oklch(0.78 0.01 255);
@@ -32,6 +33,7 @@
   :root {
     --rail: oklch(0.2 0.01 255);
     --rail-raised: oklch(0.28 0.012 255);
+    --rail-sunken: oklch(0.15 0.008 255);
     --rail-line: oklch(0.34 0.012 255);
     --table: oklch(0.31 0.009 255);
     --table-ink: oklch(0.93 0.005 255);
@@ -243,7 +245,7 @@ button {
   padding: 0 2px 0 8px;
   border: 1px solid var(--rail-line);
   border-radius: var(--radius);
-  background: color-mix(in oklch, var(--rail) 70%, black);
+  background: var(--rail-sunken);
   margin-right: 8px;
 }
 
@@ -302,7 +304,7 @@ button {
   padding: 0;
   border: 1px solid var(--rail-line);
   border-radius: var(--radius);
-  background: color-mix(in oklch, var(--rail) 70%, black);
+  background: var(--rail-sunken);
   overflow: hidden;
   cursor: pointer;
 }
@@ -370,6 +372,7 @@ button {
   gap: 8px;
   width: 280px;
   aspect-ratio: 210 / 297;
+  padding: 24px;
   border: 1px dashed var(--table-line);
   border-radius: 2px;
   color: var(--table-ink-muted);
@@ -733,7 +736,7 @@ kbd {
   border: 1px dashed #b8b8b8;
   color: #6b6b6b;
   font: 14px var(--font);
-  background: repeating-linear-gradient(135deg, transparent 0 10px, rgb(0 0 0 / 0.025) 10px 20px);
+  background: #fafafa;
 }
 
 .print-slides .pptx-preview-slide-wrapper {
