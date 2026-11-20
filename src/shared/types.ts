@@ -35,6 +35,8 @@ export interface Api {
   openDefaultAppsSettings(): void
   /** Real disk path of a dropped File (Electron removed File.path). */
   pathForFile(file: File): string
+  windowControl(action: 'minimize' | 'maximize' | 'close'): void
+  onMaximizedChange(cb: (maximized: boolean) => void): void
 }
 
 export const LARGE_FILE_BYTES = 200 * 1024 * 1024

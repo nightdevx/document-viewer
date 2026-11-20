@@ -17,7 +17,11 @@ const api: Api = {
   openExternal: (url) => ipcRenderer.send('open-external', url),
   print: () => ipcRenderer.invoke('print'),
   openDefaultAppsSettings: () => ipcRenderer.send('open-default-apps'),
-  pathForFile: (file) => webUtils.getPathForFile(file)
+  pathForFile: (file) => webUtils.getPathForFile(file),
+  windowControl: (action) => ipcRenderer.send('window-control', action),
+  onMaximizedChange(cb) {
+    ipcRenderer.on('maximized', (_e, maximized: boolean) => cb(maximized))
+  }
 }
 
 contextBridge.exposeInMainWorld('api', api)

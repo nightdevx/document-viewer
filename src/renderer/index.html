@@ -11,6 +11,7 @@
   </head>
   <body>
     <header class="strip">
+      <span class="app-mark" aria-hidden="true"><svg viewBox="0 0 256 256"><path fill="currentColor" fill-rule="evenodd" d="M68 28h120a16 16 0 0 1 16 16v168a16 16 0 0 1-16 16H68a16 16 0 0 1-16-16V44a16 16 0 0 1 16-16Z M160 62h44v22h-44Z M178 117h26v22h-26Z M160 172h44v22h-44Z"/></svg></span>
       <nav class="tabs" id="tabs" role="tablist" aria-label="Açık belgeler"></nav>
       <button class="icon-btn open-btn" id="open" type="button" title="Aç (Ctrl+O)" aria-label="Belge aç"></button>
       <div class="tools" id="tools">
@@ -30,6 +31,11 @@
           <button class="icon-btn" id="zoom-in" type="button" title="Yakınlaştır (Ctrl++)" aria-label="Yakınlaştır"></button>
         </div>
         <button class="icon-btn" id="print" type="button" title="Yazdır (Ctrl+P)" aria-label="Yazdır"></button>
+      </div>
+      <div class="window-controls" role="group" aria-label="Pencere">
+        <button class="win-btn" id="win-min" type="button" title="Simge durumuna küçült" aria-label="Simge durumuna küçült"></button>
+        <button class="win-btn" id="win-max" type="button" title="Ekranı kapla" aria-label="Ekranı kapla"></button>
+        <button class="win-btn close" id="win-close" type="button" title="Kapat" aria-label="Kapat"></button>
       </div>
     </header>
 

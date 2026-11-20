@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- C: two sheets, the one behind peeks out like an open tab -->
+  <path fill="#000" fill-rule="evenodd" d="M96 24h104a16 16 0 0 1 16 16v148a16 16 0 0 1-16 16h-8V56a24 24 0 0 0-24-24H88a16 16 0 0 1 8-8Z"/>
+  <path fill="#000" fill-rule="evenodd" d="M56 52h112a16 16 0 0 1 16 16v148a16 16 0 0 1-16 16H56a16 16 0 0 1-16-16V68a16 16 0 0 1 16-16Z
+    M68 92h88v14H68Z M68 124h88v14H68Z M68 156h56v14H68Z"/>
+</svg>

@@ -2,6 +2,7 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
+  Copy,
   createElement,
   File as FileIcon,
   FileCode,
@@ -13,6 +14,7 @@ import {
   Printer,
   Search,
   Sheet,
+  Square,
   X,
   type IconNode
 } from 'lucide'
@@ -50,6 +52,20 @@ $('zoom-in').append(icon(Plus))
 $('print').append(icon(Printer))
 $('empty-icon').append(icon(FolderOpen))
 $('notice-close').append(icon(X))
+$('win-min').append(icon(Minus))
+$('win-close').append(icon(X))
+
+function showMaximized(maximized: boolean): void {
+  $('win-max').replaceChildren(icon(maximized ? Copy : Square))
+  const label = maximized ? 'Önceki boyut' : 'Ekranı kapla'
+  $('win-max').title = label
+  $('win-max').setAttribute('aria-label', label)
+}
+showMaximized(false)
+window.api?.onMaximizedChange(showMaximized)
+$('win-min').addEventListener('click', () => window.api?.windowControl('minimize'))
+$('win-max').addEventListener('click', () => window.api?.windowControl('maximize'))
+$('win-close').addEventListener('click', () => window.api?.windowControl('close'))
 
 const tm = new TabManager({ content, createViewer, onChange: render })
 

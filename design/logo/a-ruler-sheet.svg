@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- A: a sheet whose right edge carries ruler notches (long, short, long, short, long) -->
+  <path fill="#000" fill-rule="evenodd" d="M68 28h120a16 16 0 0 1 16 16v168a16 16 0 0 1-16 16H68a16 16 0 0 1-16-16V44a16 16 0 0 1 16-16Z
+    M162 70h42v14h-42Z M182 104h22v14h-22Z M162 138h42v14h-42Z M182 172h22v14h-22Z"/>
+</svg>

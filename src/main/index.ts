@@ -47,6 +47,9 @@ function createWindow(): BrowserWindow {
     height: 800,
     show: false,
     autoHideMenuBar: true,
+    // Our own title bar: the frame stays for resizing, snapping and the Windows 11 corners.
+    titleBarStyle: 'hidden',
+    backgroundColor: '#2b2d30',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
@@ -56,6 +59,8 @@ function createWindow(): BrowserWindow {
   })
 
   if (!SMOKE) win.on('ready-to-show', () => win.show())
+  win.on('maximize', () => win.webContents.send('maximized', true))
+  win.on('unmaximize', () => win.webContents.send('maximized', false))
 
   // Documents never open new windows or navigate the app away.
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
@@ -116,6 +121,12 @@ function start(): void {
   })
   ipcMain.handle('print', (e) => (trusted(e) ? new Promise<void>((resolve) => e.sender.print({}, () => resolve())) : undefined))
   ipcMain.on('open-default-apps', (e) => trusted(e) && shell.openExternal('ms-settings:defaultapps'))
+  ipcMain.on('window-control', (e, action: string) => {
+    if (!trusted(e) || !mainWindow) return
+    if (action === 'minimize') mainWindow.minimize()
+    else if (action === 'maximize') mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
+    else if (action === 'close') mainWindow.close()
+  })
 
   mainWindow = createWindow()
   if (SMOKE) smoke(mainWindow)

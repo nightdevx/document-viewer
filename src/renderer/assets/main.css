@@ -119,6 +119,67 @@ button {
   background: var(--rail);
   color: var(--rail-ink);
   border-bottom: 1px solid var(--rail-line);
+  /* The strip is the title bar: empty space drags the window, double-click maximises. */
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.strip :is(button, input, .tab, .search, .ruler) {
+  -webkit-app-region: no-drag;
+}
+
+.app-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  flex: none;
+  color: var(--pencil);
+}
+
+.app-mark svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Window buttons follow Windows' own size and order; close turns red like everywhere else on Windows. */
+.window-controls {
+  display: flex;
+  flex: none;
+  margin-left: 4px;
+  padding-left: 4px;
+  border-left: 1px solid var(--rail-line);
+}
+
+.win-btn {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--rail-ink);
+  cursor: default;
+}
+
+.win-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5;
+}
+
+.win-btn:hover {
+  background: var(--rail-raised);
+}
+
+.win-btn.close:hover {
+  background: #c42b1c;
+  color: #fff;
+}
+
+.win-btn.close:active {
+  background: #c42b1c;
+  opacity: 0.85;
 }
 
 .tabs {
@@ -225,7 +286,7 @@ button {
   align-items: center;
   gap: 4px;
   margin-left: auto;
-  padding: 0 8px 0 16px;
+  padding: 0 4px 0 16px;
   flex: none;
 }
 
