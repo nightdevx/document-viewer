@@ -306,11 +306,11 @@ document.addEventListener('drop', async (e) => {
 
 window.api?.onOpenFiles(openPaths)
 
-// Dev only: ?open=a.pdf,b.md loads files from test-files/ when running in a plain browser.
+// Dev only: ?open=a.pdf,b.md loads files from test-files/ (served by scripts/preview.vite.config.ts).
 if (import.meta.env.DEV && !window.api) {
   const names = new URLSearchParams(location.search).get('open')?.split(',').filter(Boolean) ?? []
   for (const name of names) {
-    const res = await fetch(`/@fs/${__TEST_FILES_DIR__}/${name}`)
+    const res = await fetch(`/${name}`)
     const data = await res.arrayBuffer()
     await tm.open({ path: name, name, ext: name.split('.').pop()!.toLowerCase(), size: data.byteLength, data })
   }
