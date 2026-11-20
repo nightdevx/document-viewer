@@ -1,6 +1,6 @@
 {
   "name": "document-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A document viewer for Windows: PDF, Word, Excel, PowerPoint, Markdown and code in one tabbed window",
   "main": "./out/main/index.js",
   "author": "nightdijital <iletisim@nightdijital.com>",
