@@ -1,3 +1,4 @@
+import JSZip from 'jszip'
 import { init } from 'pptx-preview'
 import type { Viewer } from '../../../shared/types'
 import { createDomSearch, type DomSearch } from '../shell/dom-search'
@@ -5,6 +6,7 @@ import { printNode } from '../shell/print'
 import { emitStatus } from '../shell/status'
 import { assertOfficeZip } from './docx'
 import { guardImages } from './images'
+import { describeSlide } from './paper'
 
 const SLIDE_W = 960
 
@@ -18,12 +20,13 @@ export function createPptxViewer(): Viewer {
   let observer: IntersectionObserver | null = null
   let previewer: ReturnType<typeof init> | null = null
   let current = 0
+  let sizeInfo = ''
 
   function status(i: number): void {
     current = i
     thumbs.querySelectorAll('.thumb').forEach((t, n) => t.setAttribute('aria-current', String(n === i)))
     thumbs.children[i]?.scrollIntoView({ block: 'nearest' })
-    emitStatus(host, { position: `${i + 1} / ${slides.length}`, info: 'Slayt' })
+    emitStatus(host, { position: `${i + 1} / ${slides.length}`, info: sizeInfo })
   }
 
   const goTo = (i: number): void => slides[Math.max(0, Math.min(slides.length - 1, i))]?.scrollIntoView({ block: 'start' })
@@ -52,6 +55,9 @@ export function createPptxViewer(): Viewer {
         throw new Error('Sunum okunamadı. Dosya bozuk olabilir.')
       }
       guardImages(deck)
+      const presentation = await (await JSZip.loadAsync(file.data)).file('ppt/presentation.xml')?.async('string')
+      const size = presentation?.match(/<p:sldSz[^>]* cx="(\d+)"[^>]* cy="(\d+)"/)
+      if (size) sizeInfo = describeSlide(Number(size[1]), Number(size[2]))
       // pptx-preview draws charts half-way (axes without bars, a Chinese default title); show an honest placeholder.
       for (const chart of deck.querySelectorAll<HTMLElement>('.chart-node')) {
         const ph = document.createElement('div')

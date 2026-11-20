@@ -18,3 +18,16 @@ export function describePage(widthPt: number, heightPt: number): string {
   if (!paper) return size
   return `${paper[0]}${w > h ? ' yatay' : ''} · ${size}`
 }
+
+const RATIOS: [string, number][] = [
+  ['16:9', 16 / 9],
+  ['16:10', 16 / 10],
+  ['4:3', 4 / 3]
+]
+
+/** Status-bar text for a slide size in EMU (360 000 per cm), e.g. "16:9 · 33,9 × 19,1 cm". */
+export function describeSlide(cx: number, cy: number): string {
+  const size = `${cm(cx / 360_000)} × ${cm(cy / 360_000)} cm`
+  const ratio = RATIOS.find(([, r]) => Math.abs(cx / cy - r) < 0.01)
+  return ratio ? `${ratio[0]} · ${size}` : size
+}

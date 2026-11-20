@@ -1,22 +1,23 @@
 /* Drafting table: graphite rails at top and bottom, the document lies on the table between them. */
 :root {
   color-scheme: light dark;
-  --rail: oklch(0.29 0.012 255);
-  --rail-raised: oklch(0.36 0.014 255);
-  --rail-sunken: oklch(0.22 0.01 255);
-  --rail-line: oklch(0.42 0.012 255);
+  --rail: oklch(0.29 0.005 255);
+  --rail-raised: oklch(0.36 0.005 255);
+  --rail-sunken: oklch(0.22 0.005 255);
+  --rail-line: oklch(0.42 0.005 255);
   --rail-ink: oklch(0.96 0.004 255);
-  --rail-ink-muted: oklch(0.78 0.01 255);
-  --table: oklch(0.885 0.006 255);
-  --table-ink: oklch(0.27 0.012 255);
-  --table-ink-muted: oklch(0.42 0.012 255);
-  --table-line: oklch(0.74 0.008 255);
+  --rail-ink-muted: oklch(0.78 0.005 255);
+  --table: oklch(0.885 0.005 255);
+  --table-ink: oklch(0.27 0.005 255);
+  --table-ink-muted: oklch(0.42 0.005 255);
+  --table-line: oklch(0.74 0.005 255);
   --sheet: oklch(0.995 0 0);
   --pencil: oklch(0.72 0.165 55);
   --pencil-strong: oklch(0.64 0.17 50);
   --pencil-ink: oklch(0.22 0.04 55);
-  --highlight: oklch(0.91 0.19 120 / 0.55);
-  --highlight-current: oklch(0.8 0.2 125 / 0.85);
+  --pencil-text: oklch(0.5 0.15 45);
+  --highlight: oklch(0.93 0.17 120);
+  --highlight-current: oklch(0.85 0.2 125);
   --danger: oklch(0.58 0.19 28);
   --shadow: 0 1px 2px oklch(0.2 0.01 255 / 0.18), 0 6px 18px oklch(0.2 0.01 255 / 0.14);
   --paper: oklch(0.985 0.002 255);
@@ -31,18 +32,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --rail: oklch(0.2 0.01 255);
-    --rail-raised: oklch(0.28 0.012 255);
-    --rail-sunken: oklch(0.15 0.008 255);
-    --rail-line: oklch(0.34 0.012 255);
-    --table: oklch(0.31 0.009 255);
+    --rail: oklch(0.2 0.005 255);
+    --rail-raised: oklch(0.28 0.005 255);
+    --rail-sunken: oklch(0.15 0.005 255);
+    --rail-line: oklch(0.34 0.005 255);
+    --table: oklch(0.31 0.005 255);
     --table-ink: oklch(0.93 0.005 255);
-    --table-ink-muted: oklch(0.76 0.01 255);
-    --table-line: oklch(0.45 0.01 255);
+    --table-ink-muted: oklch(0.76 0.005 255);
+    --table-line: oklch(0.45 0.005 255);
     --paper: oklch(0.235 0.008 255);
     --paper-ink: oklch(0.92 0.005 255);
     --paper-ink-faint: oklch(0.6 0.01 255);
     --paper-line: oklch(0.33 0.01 255);
+    --pencil-text: oklch(0.72 0.165 55);
     --shadow: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 22px oklch(0 0 0 / 0.35);
   }
 }
@@ -186,8 +188,8 @@ button {
 }
 
 .icon-btn.small {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 }
 
 .icon-btn:hover {
@@ -204,8 +206,8 @@ button {
 }
 
 .tab .icon-btn {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   opacity: 0.7;
 }
 
@@ -240,7 +242,7 @@ button {
 .search {
   display: flex;
   align-items: center;
-  height: 30px;
+  height: 32px;
   width: 260px;
   padding: 0 2px 0 8px;
   border: 1px solid var(--rail-line);
@@ -300,7 +302,7 @@ button {
   display: flex;
   align-items: flex-end;
   width: 112px;
-  height: 30px;
+  height: 32px;
   padding: 0;
   border: 1px solid var(--rail-line);
   border-radius: var(--radius);
@@ -319,9 +321,9 @@ button {
   --cm: 38px;
   --minor: 19px;
   background:
-    linear-gradient(to right, var(--rail-ink) 1px, transparent 1px) 0 0 / var(--cm) 9px repeat-x,
-    linear-gradient(to right, var(--rail-ink-muted) 1px, transparent 1px) 0 0 / var(--minor) 4px repeat-x;
-  opacity: 0.8;
+    linear-gradient(var(--rail-ink-muted), var(--rail-ink-muted)) 0 0 / 100% 1px no-repeat,
+    linear-gradient(to right, var(--rail-ink) 1px, transparent 1px) 1px 0 / var(--cm) 10px repeat-x,
+    linear-gradient(to right, var(--rail-ink-muted) 1px, transparent 1px) 1px 0 / var(--minor) 5px repeat-x;
 }
 
 .ruler-value {
@@ -572,6 +574,11 @@ kbd {
   font-size: 15px;
 }
 
+.md-doc .markdown-body a {
+  color: var(--pencil-text);
+  text-underline-offset: 2px;
+}
+
 .md-doc .markdown-body pre.shiki {
   padding: 16px;
   border-radius: var(--radius);
@@ -599,19 +606,18 @@ kbd {
   padding: 24px 0 48px;
 }
 
-.pdf-container .pdfViewer .page:first-child {
-  margin-top: 24px !important;
-}
-
 .pdf-container .pdfViewer .page {
   border: 0;
   margin: 0 auto 16px;
   box-shadow: var(--shadow);
 }
 
+.pdf-container .textLayer {
+  mix-blend-mode: multiply;
+}
+
 .pdf-container .textLayer .highlight {
   background-color: var(--highlight);
-  mix-blend-mode: multiply;
 }
 
 .pdf-container .textLayer .highlight.selected {

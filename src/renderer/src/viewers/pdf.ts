@@ -41,7 +41,13 @@ export function createPdfViewer(): Viewer {
   let viewer: PDFViewer
   let eventBus: EventBus
   let host: HTMLElement
+  let container: HTMLDivElement
   let lastQuery = ''
+
+  // pdf.js scrolls page 1 flush to the top on load and zoom; keep the table margin above it.
+  const showTopMargin = (): void => {
+    if (viewer.currentPageNumber === 1 && container.scrollTop <= 24) container.scrollTop = 0
+  }
 
   function status(): void {
     const n = viewer.currentPageNumber
@@ -62,7 +68,7 @@ export function createPdfViewer(): Viewer {
   return {
     async mount(h, file) {
       host = h
-      const container = document.createElement('div')
+      container = document.createElement('div')
       container.className = 'pdf-container'
       const inner = document.createElement('div')
       inner.className = 'pdfViewer'
@@ -99,6 +105,7 @@ export function createPdfViewer(): Viewer {
       linkService.setDocument(doc)
       eventBus.on('pagesinit', () => {
         viewer.currentScale = 1
+        showTopMargin()
         status()
       })
       eventBus.on('pagechanging', status)
@@ -108,6 +115,7 @@ export function createPdfViewer(): Viewer {
     },
     setZoom(z) {
       viewer.currentScale = z
+      showTopMargin()
     },
     search(query, dir) {
       const again = query === lastQuery
