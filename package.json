@@ -22,13 +22,16 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "github-markdown-css": "^5.9.0",
     "lucide": "^1.77.0",
+    "markdown-it": "^15.0.3",
     "shiki": "^4.6.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.1",
     "@electron-toolkit/eslint-config-ts": "^4.0.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/markdown-it": "^14.2.0",
     "@types/node": "^24.19.2",
     "cross-env": "^10.1.0",
     "electron": "^45.4.1",

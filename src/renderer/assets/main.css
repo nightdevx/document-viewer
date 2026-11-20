@@ -556,6 +556,35 @@ kbd {
   }
 }
 
+.md-doc {
+  padding: 40px 24px 64px;
+}
+
+.md-doc .markdown-body {
+  max-width: 860px;
+  margin: 0 auto;
+  background: transparent;
+  font-family: var(--font);
+  font-size: 15px;
+}
+
+.md-doc .markdown-body pre.shiki {
+  padding: 16px;
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--paper-ink) 5%, var(--paper)) !important;
+}
+
+.image-placeholder {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px dashed var(--paper-line, #bbb);
+  border-radius: var(--radius);
+  color: var(--paper-ink-faint, #777);
+  font: 12px/1.4 var(--font);
+}
+
 /* search matches: reserved highlighter colour, used nowhere else */
 ::highlight(search) {
   background-color: var(--highlight);
